@@ -1,6 +1,6 @@
 # AWS Infrastructure Setup with Terraform
 
-## Prerequisites
+## Pre-requisites
 - AWS CLI installed and configured (`aws configure`)
 - Terraform installed (`terraform -v`)
 - GitHub repository `tf-aws-infra` cloned locally
@@ -11,3 +11,4 @@
    ```sh
    git clone git@github.com:your-github-username/tf-aws-infra.git
    cd tf-aws-infra
+   
