@@ -33,3 +33,13 @@ variable "availability_zones" {
   type        = list(string)
   default     = ["us-east-1a", "us-east-1b", "us-east-1c"]
 }
+
+variable "custom_ami" {
+  description = "Custom AMI ID created using Packer"
+  type        = string
+}
+
+variable "app_port" {
+  description = "Port on which the web application runs"
+  type        = number
+}
