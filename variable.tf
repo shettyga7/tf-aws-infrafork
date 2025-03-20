@@ -43,3 +43,57 @@ variable "app_port" {
   description = "Port on which the web application runs"
   type        = number
 }
+
+variable "db_engine" {
+  description = "Database engine for RDS"
+  type        = string
+  default     = "mysql"
+}
+
+variable "db_engine_version" {
+  description = "Database engine version"
+  type        = string
+  default     = "8.0"
+}
+
+variable "db_instance_class" {
+  description = "Instance type for RDS"
+  type        = string
+  default     = "db.t3.micro"
+}
+
+variable "db_allocated_storage" {
+  description = "Allocated storage size for RDS (in GB)"
+  type        = number
+  default     = 20
+}
+
+variable "db_host" {
+  type    = string
+  default = "csye6225.caneqsuwexma.us-east-1.rds.amazonaws.com"
+}
+
+variable "db_name" {
+  description = "Name of the database"
+  type        = string
+  default     = "csye6225"
+}
+
+variable "db_username" {
+  description = "Master username for RDS"
+  type        = string
+  default     = "csye6225"
+}
+
+variable "db_password" {
+  description = "Master password for RDS"
+  type        = string
+  sensitive   = true
+}
+
+variable "db_subnet_group_name" {
+  description = "RDS Subnet Group Name"
+  type        = string
+  default     = "rds-subnet-group"
+}
+

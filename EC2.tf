@@ -4,15 +4,13 @@ resource "aws_security_group" "app_sg" {
   description = "Allow inbound traffic for application and SSH"
   vpc_id      = aws_vpc.my_vpc.id
 
-  # Allow SSH
   ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] # Allow SSH from anywhere
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Allow HTTP
   ingress {
     from_port   = 80
     to_port     = 80
@@ -20,7 +18,6 @@ resource "aws_security_group" "app_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Allow HTTPS
   ingress {
     from_port   = 443
     to_port     = 443
@@ -28,7 +25,6 @@ resource "aws_security_group" "app_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Allow Application Port
   ingress {
     from_port   = 8080
     to_port     = 8080
@@ -36,7 +32,6 @@ resource "aws_security_group" "app_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Allow all outgoing traffic
   egress {
     from_port   = 0
     to_port     = 0
@@ -49,22 +44,48 @@ resource "aws_security_group" "app_sg" {
   }
 }
 
+# IAM Role for EC2 Instance
+resource "aws_iam_role" "ec2_role" {
+  name = "ec2-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Action = "sts:AssumeRole"
+      Effect = "Allow"
+      Principal = {
+        Service = "ec2.amazonaws.com"
+      }
+    }]
+  })
+}
+
+# IAM Instance Profile
+resource "aws_iam_instance_profile" "ec2_profile" {
+  name = "ec2-instance-profile"
+  role = aws_iam_role.ec2_role.name
+}
+
 # Create EC2 Instance
 resource "aws_instance" "web_instance" {
-  ami                         = var.custom_ami # Custom AMI created from Packer
+  ami                         = var.custom_ami
   instance_type               = "t2.micro"
-  subnet_id                   = aws_subnet.public_subnets[0].id
+  subnet_id                   = element(aws_subnet.public_subnets[*].id, 0)
   vpc_security_group_ids      = [aws_security_group.app_sg.id]
+  iam_instance_profile        = aws_iam_instance_profile.ec2_profile.name
   associate_public_ip_address = true
-  disable_api_termination     = false # Allow instance termination
+  disable_api_termination     = false
+
+  # ✅ Ensure correct reference to user_data.sh
+  user_data = file("${path.module}/user_data.sh")
 
   root_block_device {
     volume_size           = 25
     volume_type           = "gp2"
-    delete_on_termination = true # Terminate EBS with instance
+    delete_on_termination = true
   }
 
   tags = {
-    Name = "web-instance"
+    Name = "WebApp-EC2"
   }
 }
