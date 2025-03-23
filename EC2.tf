@@ -76,8 +76,24 @@ resource "aws_instance" "web_instance" {
   associate_public_ip_address = true
   disable_api_termination     = false
 
-  # ✅ Ensure correct reference to user_data.sh
-  user_data = file("${path.module}/user_data.sh")
+  user_data = <<-EOF
+    #!/bin/bash
+    sudo apt update -y
+    sudo apt install -y mysql-client unzip
+
+    echo 'DB_HOST="${aws_db_instance.webapp_rds.endpoint}"' | sudo tee -a /etc/environment
+    echo 'DB_USER="csye6225"' | sudo tee -a /etc/environment
+    echo 'DB_PASS="${var.db_password}"' | sudo tee -a /etc/environment
+    echo 'DB_NAME="csye6225"' | sudo tee -a /etc/environment
+    echo 'AWS_REGION="us-east-1"' | sudo tee -a /etc/environment
+    echo 'S3_BUCKET_NAME="csye6225-webapp-bucket"' | sudo tee -a /etc/environment
+    source /etc/environment
+
+    sudo cp /opt/webapp/webapp/webapp.service /etc/systemd/system/webapp.service
+    sudo systemctl daemon-reload
+    sudo systemctl enable webapp
+    sudo systemctl start webapp
+  EOF
 
   root_block_device {
     volume_size           = 25
