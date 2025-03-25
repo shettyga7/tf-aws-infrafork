@@ -44,27 +44,27 @@ resource "aws_security_group" "app_sg" {
   }
 }
 
-# IAM Role for EC2 Instance
-resource "aws_iam_role" "ec2_role" {
-  name = "ec2-role"
+# # IAM Role for EC2 Instance
+# resource "aws_iam_role" "ec2_role" {
+#   name = "ec2-role"
 
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Action = "sts:AssumeRole"
-      Effect = "Allow"
-      Principal = {
-        Service = "ec2.amazonaws.com"
-      }
-    }]
-  })
-}
+#   assume_role_policy = jsonencode({
+#     Version = "2012-10-17"
+#     Statement = [{
+#       Action = "sts:AssumeRole"
+#       Effect = "Allow"
+#       Principal = {
+#         Service = "ec2.amazonaws.com"
+#       }
+#     }]
+#   })
+# }
 
-# IAM Instance Profile
-resource "aws_iam_instance_profile" "ec2_profile" {
-  name = "ec2-instance-profile"
-  role = aws_iam_role.ec2_role.name
-}
+# # IAM Instance Profile
+# resource "aws_iam_instance_profile" "ec2_profile" {
+#   name = "ec2-instance-profile"
+#   role = aws_iam_role.ec2_role.name
+# }
 
 # Create EC2 Instance
 resource "aws_instance" "web_instance" {
@@ -88,11 +88,8 @@ resource "aws_instance" "web_instance" {
     echo 'AWS_REGION="us-east-1"' | sudo tee -a /etc/environment
     echo 'S3_BUCKET_NAME="csye6225-webapp-bucket"' | sudo tee -a /etc/environment
     source /etc/environment
-
-    sudo cp /opt/webapp/webapp/webapp.service /etc/systemd/system/webapp.service
-    sudo systemctl daemon-reload
-    sudo systemctl enable webapp
-    sudo systemctl start webapp
+    
+    sudo systemctl restart webapp
   EOF
 
   root_block_device {
