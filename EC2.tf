@@ -1,35 +1,21 @@
-# Create Security Group for Web Application
+# ✅ Application Security Group (used in EC2)
 resource "aws_security_group" "app_sg" {
   name        = "app-security-group"
-  description = "Allow inbound traffic for application and SSH"
+  description = "Allow access to app from Load Balancer SG"
   vpc_id      = aws_vpc.my_vpc.id
 
   ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    security_groups = [aws_security_group.lb_sg.id] # SSH access only from Load Balancer SG
   }
 
   ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 8080
-    to_port     = 8080
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    from_port       = 8080
+    to_port         = 8080
+    protocol        = "tcp"
+    security_groups = [aws_security_group.lb_sg.id] # App access only from Load Balancer SG
   }
 
   egress {
@@ -44,61 +30,39 @@ resource "aws_security_group" "app_sg" {
   }
 }
 
-# # IAM Role for EC2 Instance
-# resource "aws_iam_role" "ec2_role" {
-#   name = "ec2-role"
-
-#   assume_role_policy = jsonencode({
-#     Version = "2012-10-17"
-#     Statement = [{
-#       Action = "sts:AssumeRole"
-#       Effect = "Allow"
-#       Principal = {
-#         Service = "ec2.amazonaws.com"
-#       }
-#     }]
-#   })
-# }
-
-# # IAM Instance Profile
-# resource "aws_iam_instance_profile" "ec2_profile" {
-#   name = "ec2-instance-profile"
-#   role = aws_iam_role.ec2_role.name
-# }
-
 # Create EC2 Instance
-resource "aws_instance" "web_instance" {
-  ami                         = var.custom_ami
-  instance_type               = "t2.micro"
-  subnet_id                   = element(aws_subnet.public_subnets[*].id, 0)
-  vpc_security_group_ids      = [aws_security_group.app_sg.id]
-  iam_instance_profile        = aws_iam_instance_profile.ec2_profile.name
-  associate_public_ip_address = true
-  disable_api_termination     = false
+# resource "aws_instance" "web_instance" {
+#   ami                         = var.custom_ami
+#   instance_type               = "t2.micro"
+#   subnet_id                   = element(aws_subnet.public_subnets[*].id, 0)
+#   vpc_security_group_ids      = [aws_security_group.app_sg.id]
+#   iam_instance_profile        = aws_iam_instance_profile.ec2_profile.name
+#   associate_public_ip_address = true
+#   disable_api_termination     = false
 
-  user_data = <<-EOF
-    #!/bin/bash
-    sudo apt update -y
-    sudo apt install -y mysql-client unzip
+#   user_data = <<-EOF
+#     #!/bin/bash
+#     sudo apt update -y
+#     sudo apt install -y mysql-client unzip
 
-    echo 'DB_HOST="${aws_db_instance.webapp_rds.endpoint}"' | sudo tee -a /etc/environment
-    echo 'DB_USER="csye6225"' | sudo tee -a /etc/environment
-    echo 'DB_PASS="${var.db_password}"' | sudo tee -a /etc/environment
-    echo 'DB_NAME="csye6225"' | sudo tee -a /etc/environment
-    echo 'AWS_REGION="us-east-1"' | sudo tee -a /etc/environment
-    echo 'S3_BUCKET_NAME="csye6225-webapp-bucket"' | sudo tee -a /etc/environment
-    source /etc/environment
-    
-    sudo systemctl restart webapp
-  EOF
+#     echo 'DB_HOST="${aws_db_instance.webapp_rds.endpoint}"' | sudo tee -a /etc/environment
+#     echo 'DB_USER="csye6225"' | sudo tee -a /etc/environment
+#     echo 'DB_PASS="${var.db_password}"' | sudo tee -a /etc/environment
+#     echo 'DB_NAME="csye6225"' | sudo tee -a /etc/environment
+#     echo 'AWS_REGION="us-east-1"' | sudo tee -a /etc/environment
+#     echo 'S3_BUCKET_NAME="csye6225-webapp-bucket"' | sudo tee -a /etc/environment
+#     source /etc/environment
 
-  root_block_device {
-    volume_size           = 25
-    volume_type           = "gp2"
-    delete_on_termination = true
-  }
+#     sudo systemctl restart webapp
+#   EOF
 
-  tags = {
-    Name = "WebApp-EC2"
-  }
-}
+#   root_block_device {
+#     volume_size           = 25
+#     volume_type           = "gp2"
+#     delete_on_termination = true
+#   }
+
+#   tags = {
+#     Name = "WebApp-EC2"
+#   }
+# }
