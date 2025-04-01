@@ -97,3 +97,7 @@ variable "db_subnet_group_name" {
   default     = "rds-subnet-group"
 }
 
+variable "key_name" {
+  description = "Name of the existing EC2 Key Pair"
+  type        = string
+}
