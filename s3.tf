@@ -1,7 +1,7 @@
 resource "random_uuid" "bucket_name" {}
 
 resource "aws_s3_bucket" "webapp_bucket" {
-  bucket        = "csye6225-webapp-bucket"
+  bucket        = "csye6225-webapp-bucket-${random_uuid.bucket_name.result}"
   force_destroy = true
 
   tags = {

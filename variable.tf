@@ -7,7 +7,7 @@ variable "aws_region" {
 variable "profile" {
   description = "AWS CLI profile"
   type        = string
-  default     = "dev"
+  default     = "demo"
 }
 
 variable "vpc_cidr" {
@@ -97,7 +97,7 @@ variable "db_subnet_group_name" {
   default     = "rds-subnet-group"
 }
 
-variable "key_name" {
-  description = "Name of the existing EC2 Key Pair"
+variable "subdomain" {
+  description = "Subdomain like dev.ganeshshetty.me. or demo.ganeshshetty.me."
   type        = string
 }
