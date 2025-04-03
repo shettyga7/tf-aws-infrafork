@@ -101,3 +101,15 @@ variable "subdomain" {
   description = "Subdomain like dev.ganeshshetty.me. or demo.ganeshshetty.me."
   type        = string
 }
+
+variable "high_threshold" {
+  type        = number
+  default     = 70
+  description = "CPU threshold to trigger scale-up"
+}
+
+variable "low_threshold" {
+  type        = number
+  default     = 20
+  description = "CPU threshold to trigger scale-down"
+}
