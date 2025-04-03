@@ -2,7 +2,7 @@ resource "aws_launch_template" "web_launch_template" {
   name_prefix   = "csye6225-launch-template"
   image_id      = var.custom_ami
   instance_type = "t2.micro"
-  key_name      = var.key_name
+
 
   user_data = base64encode(<<-EOF
     #!/bin/bash

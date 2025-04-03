@@ -1,11 +1,11 @@
-variable "dev_zone_id" {
-  description = "Route53 Hosted Zone ID for dev.ganeshshetty.me"
-  type        = string
+data "aws_route53_zone" "this" {
+  name         = var.subdomain
+  private_zone = false
 }
 
 resource "aws_route53_record" "webapp_alias" {
-  zone_id = var.dev_zone_id
-  name    = ""
+  zone_id = data.aws_route53_zone.this.zone_id
+  name    = "" # root of the subdomain
   type    = "A"
 
   alias {
