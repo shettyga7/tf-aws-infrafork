@@ -10,7 +10,7 @@ resource "aws_security_group" "lb_sg" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
- 
+
   ingress {
     description      = "Allow HTTP traffic from anywhere (IPv6)"
     from_port        = 80
@@ -18,7 +18,7 @@ resource "aws_security_group" "lb_sg" {
     protocol         = "tcp"
     ipv6_cidr_blocks = ["::/0"]
   }
- 
+
   ingress {
     description = "Allow HTTPS traffic from anywhere"
     from_port   = 443
@@ -26,7 +26,7 @@ resource "aws_security_group" "lb_sg" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
- 
+
   ingress {
     description      = "Allow HTTPS traffic from anywhere (IPv6)"
     from_port        = 443
@@ -34,7 +34,7 @@ resource "aws_security_group" "lb_sg" {
     protocol         = "tcp"
     ipv6_cidr_blocks = ["::/0"]
   }
- 
+
   egress {
     description = "Allow all outbound traffic"
     from_port   = 0
@@ -42,7 +42,7 @@ resource "aws_security_group" "lb_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
- 
+
   egress {
     description      = "Allow all outbound traffic (IPv6)"
     from_port        = 0

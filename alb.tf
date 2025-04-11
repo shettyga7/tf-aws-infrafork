@@ -1,7 +1,7 @@
 # ALB Resource
 data "aws_acm_certificate" "ssl" {
-  domain      = var.subdomain
-  statuses    = ["ISSUED"]
+  domain   = var.subdomain
+  statuses = ["ISSUED"]
 }
 
 resource "aws_lb" "web_alb" {

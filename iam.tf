@@ -63,13 +63,13 @@ resource "aws_iam_instance_profile" "ec2_profile" {
 resource "aws_iam_policy" "kms_ec2_policy" {
   name        = "kms-ec2-access"
   description = "Allow EC2 to use KMS for decrypting secrets and EBS"
-  policy      = jsonencode({
+  policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
       {
-        Sid      = "AllowUseOfKMSKey",
-        Effect   = "Allow",
-        Action   = [
+        Sid    = "AllowUseOfKMSKey",
+        Effect = "Allow",
+        Action = [
           "kms:Decrypt",
           "kms:GenerateDataKey",
           "kms:DescribeKey"
