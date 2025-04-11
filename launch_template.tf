@@ -13,10 +13,10 @@ resource "aws_launch_template" "web_launch_template" {
     curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
     unzip awscliv2.zip
     sudo ./aws/install
-    # export PATH=$PATH:/usr/local/bin
+    export PATH=$PATH:/usr/local/bin
 
     # Fetch DB password securely from Secrets Manager
-    SECRET_NAME="db-password-v21"
+    SECRET_NAME="db-password-v24"
     REGION="us-east-1"
     # Retrieve DB password from AWS Secrets Manager
     DB_PASS=$(aws secretsmanager get-secret-value --secret-id "$SECRET_NAME" --region "$REGION" --query SecretString --output text)

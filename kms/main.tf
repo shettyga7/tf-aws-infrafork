@@ -32,7 +32,7 @@ locals {
       "Sid": "Enable IAM User Permissions",
       "Effect": "Allow",
       "Principal": {
-        "AWS": "arn:aws:iam::116981766114:root"
+        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
       },
       "Action": "kms:*",
       "Resource": "*"
@@ -41,7 +41,7 @@ locals {
       "Sid": "Allow EC2 Instance Role",
       "Effect": "Allow",
       "Principal": {
-        "AWS": "arn:aws:iam::116981766114:role/ec2-role"
+        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/ec2-role"
       },
       "Action": [
         "kms:Decrypt",
@@ -53,7 +53,7 @@ locals {
       "Sid": "Allow Auto Scaling Role",
       "Effect": "Allow",
       "Principal": {
-        "AWS": "arn:aws:iam::116981766114:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling"
+        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling"
       },
       "Action": [
         "kms:Encrypt",
@@ -68,7 +68,7 @@ locals {
       "Sid": "Allow attachment of persistent resources",
       "Effect": "Allow",
       "Principal": {
-        "AWS": "arn:aws:iam::116981766114:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling"
+        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling"
       },
       "Action": [
         "kms:CreateGrant"

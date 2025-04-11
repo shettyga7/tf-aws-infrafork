@@ -6,7 +6,7 @@ resource "aws_autoscaling_group" "web_asg" {
   name                      = "csye6225-asg-${random_id.asg_suffix.hex}"
   max_size                  = 5
   min_size                  = 3
-  desired_capacity          = 1
+  desired_capacity          = 3
   vpc_zone_identifier       = aws_subnet.public_subnets[*].id
   health_check_type         = "EC2"
   health_check_grace_period = 300
