@@ -5,7 +5,7 @@ data "aws_route53_zone" "this" {
 
 resource "aws_route53_record" "webapp_alias" {
   zone_id = data.aws_route53_zone.this.zone_id
-  name    = "" # root of the subdomain
+  name    = var.subdomain # root of the subdomain
   type    = "A"
 
   alias {

@@ -21,6 +21,8 @@ resource "aws_db_instance" "webapp_rds" {
   db_subnet_group_name   = aws_db_subnet_group.db_subnet_group.name
   publicly_accessible    = false
   skip_final_snapshot    = true
+  storage_encrypted      = true
+  kms_key_id             = module.kms.rds_key_arn
 
   tags = {
     Name = "csye6225-rds"
