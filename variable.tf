@@ -104,12 +104,12 @@ variable "subdomain" {
 
 variable "high_threshold" {
   type        = number
-  default     = 70
+  default     = 12
   description = "CPU threshold to trigger scale-up"
 }
 
 variable "low_threshold" {
   type        = number
-  default     = 20
+  default     = 8
   description = "CPU threshold to trigger scale-down"
 }
