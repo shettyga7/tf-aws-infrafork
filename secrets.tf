@@ -1,5 +1,5 @@
 resource "aws_secretsmanager_secret" "db_password" {
-  name        = "db-password-v24"
+  name        = "db-password-v27"
   description = "Database password stored securely"
   kms_key_id  = module.kms.secretsmanager_key_arn
 }
