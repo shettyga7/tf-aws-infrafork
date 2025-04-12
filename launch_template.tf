@@ -1,5 +1,5 @@
 resource "aws_launch_template" "web_launch_template" {
-  name_prefix   = "csye6225-launch-template"
+  name          = "csye6225-launch-template"
   image_id      = var.custom_ami
   instance_type = "t2.micro"
 
@@ -16,7 +16,7 @@ resource "aws_launch_template" "web_launch_template" {
     export PATH=$PATH:/usr/local/bin
 
     # Fetch DB password securely from Secrets Manager
-    SECRET_NAME="db-password-v24"
+    SECRET_NAME="db-password-v27"
     REGION="us-east-1"
     # Retrieve DB password from AWS Secrets Manager
     DB_PASS=$(aws secretsmanager get-secret-value --secret-id "$SECRET_NAME" --region "$REGION" --query SecretString --output text)
