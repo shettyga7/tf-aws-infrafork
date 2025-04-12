@@ -1,5 +1,5 @@
 resource "aws_launch_template" "web_launch_template" {
-  name   = "csye6225-launch-template"
+  name          = "csye6225-launch-template"
   image_id      = var.custom_ami
   instance_type = "t2.micro"
 
