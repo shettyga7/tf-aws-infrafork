@@ -16,17 +16,17 @@ resource "aws_launch_template" "web_launch_template" {
     export PATH=$PATH:/usr/local/bin
 
     # Fetch DB password securely from Secrets Manager
-    SECRET_NAME="db-password-v27"
+    SECRET_NAME="db-password-v32"
     REGION="us-east-1"
     # Retrieve DB password from AWS Secrets Manager
     DB_PASS=$(aws secretsmanager get-secret-value --secret-id "$SECRET_NAME" --region "$REGION" --query SecretString --output text)
 
-    echo "DB_HOST=${aws_db_instance.webapp_rds.endpoint}" | sudo tee -a /etc/environment
-    echo 'DB_USER="csye6225"' | sudo tee -a /etc/environment
-    echo "DB_PASS=$DB_PASS" | sudo tee -a /etc/environment
-    echo 'DB_NAME="csye6225"' | sudo tee -a /etc/environment
-    echo "AWS_REGION=$REGION" | sudo tee -a /etc/environment
-    echo 'S3_BUCKET_NAME="csye6225-webapp-bucket"' | sudo tee -a /etc/environment
+    echo DB_HOST=${aws_db_instance.webapp_rds.endpoint} | sudo tee -a /etc/environment
+    echo DB_USER=csye6225 | sudo tee -a /etc/environment
+    echo DB_PASS=$DB_PASS | sudo tee -a /etc/environment
+    echo DB_NAME=csye6225 | sudo tee -a /etc/environment
+    echo AWS_REGION=$REGION | sudo tee -a /etc/environment
+    echo S3_BUCKET_NAME=csye6225-webapp-bucket-gs | sudo tee -a /etc/environment
     source /etc/environment
 
     cd /opt/webapp

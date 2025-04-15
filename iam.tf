@@ -31,13 +31,31 @@ resource "aws_iam_role_policy" "ec2_secretsmanager_access" {
     ]
   })
 }
-# IAM Policy for S3 Access
+# # IAM Policy for S3 Access
+# resource "aws_iam_policy" "s3_policy" {
+#   name        = "S3BucketAccessPolicy"
+#   description = "IAM policy for S3 bucket access"
+#   policy      = file("${path.module}/S3BucketPolicy.json")
+# }
+
 resource "aws_iam_policy" "s3_policy" {
   name        = "S3BucketAccessPolicy"
   description = "IAM policy for S3 bucket access"
-  policy      = file("${path.module}/S3BucketPolicy.json")
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "s3:PutObject",
+          "s3:GetObject",
+          "s3:DeleteObject"
+        ],
+        Resource = "arn:aws:s3:::csye6225-webapp-bucket-gs/*"
+      }
+    ]
+  })
 }
-
 resource "aws_iam_role_policy_attachment" "s3_policy_attachment" {
   policy_arn = aws_iam_policy.s3_policy.arn
   role       = aws_iam_role.ec2_role.name
