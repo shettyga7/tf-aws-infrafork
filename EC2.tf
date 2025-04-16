@@ -5,9 +5,9 @@ resource "aws_security_group" "app_sg" {
   vpc_id      = aws_vpc.my_vpc.id
 
   ingress {
-    from_port = 22
-    to_port   = 22
-    protocol  = "tcp"
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
     security_groups = [aws_security_group.lb_sg.id]
     # SSH access only from Load Balancer SG
     # cidr_blocks = ["0.0.0.0/0"]
